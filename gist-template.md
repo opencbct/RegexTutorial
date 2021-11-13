@@ -73,14 +73,35 @@ By placing part of a regular expression inside round brackets or parentheses, yo
 Only parentheses can be used for grouping. Square brackets define a character class, and curly braces are used by a quantifier with specific limits.
 
 ### Bracket Expressions
+The main purpose of bracket expressions is that they adapt to the user’s or application’s locale. A locale is a collection of rules and settings that describe language and cultural conventions, like sort order, date format, etc. The POSIX standard defines these locales.
 
+A POSIX locale can have collating sequences to describe how certain characters or groups of characters should be ordered. In Czech, for example, ch as in chemie (“chemistry” in Czech) is a digraph. This means it should be treated as if it were one character. It is ordered between h and i in the Czech alphabet. You can use the collating sequence element [.ch.] inside a bracket expression to match ch when the Czech locale (cs-CZ) is active. The regex [[.ch.]]emie matches chemie. Notice the double square brackets. One pair for the bracket expression, and one pair for the collating sequence.
 ### Greedy and Lazy Match
+The question mark makes the preceding token in the regular expression optional. colou?r matches both colour and color. The question mark is called a quantifier.
+
+You can make several tokens optional by grouping them together using parentheses, and placing the question mark after the closing parenthesis. E.g.: Nov(ember)? matches Nov and November.
+
+You can write a regular expression that matches many alternatives by including more than one question mark. Feb(ruary)? 23(rd)? matches February 23rd, February 23, Feb 23rd and Feb 23.
+
+You can also use curly braces to make something optional. colou{0,1}r is the same as colou?r. POSIX BRE and GNU BRE do not support either syntax. These flavors require backslashes to give curly braces their special meaning: colou\{0,1\}r.
+
 
 ### Boundaries
+The metacharacter \b is an anchor like the caret and the dollar sign. It matches at a position that is called a “word boundary”. This match is zero-length.
+
+There are three different positions that qualify as word boundaries:
+
+Before the first character in the string, if the first character is a word character.
+After the last character in the string, if the last character is a word character.
+Between two characters in the string, where one is a word character and the other is not a word character.
+Simply put: \b allows you to perform a “whole words only” search using a regular expression in the form of \bword\b. A “word character” is a character that can be used to form words. All characters that are not “word characters” are “non-word characters”.
+
+
 
 ### Back-references
-
+Backreferences match the same text as previously matched by a capturing group. Suppose you want to match a pair of opening and closing HTML tags, and the text in between. By putting the opening tag into a backreference, we can reuse the name of the tag for the closing tag. Here’s how: <([A-Z][A-Z0-9]*)\b[^>]*>.*?</\1>. This regex contains only one pair of parentheses, which capture the string matched by [A-Z][A-Z0-9]*. This is the opening HTML tag. (Since HTML tags are case insensitive, this regex requires case insensitive matching.) The backreference \1 (backslash one) references the first capturing group. \1 matches the exact same text that was matched by the first capturing group. The / before it is a literal character. It is simply the forward slash in the closing HTML tag that we are trying to match.
 ### Look-ahead and Look-behind
+For the if part, you can use the lookahead and lookbehind constructs. Using positive lookahead, the syntax becomes (?(?=regex)then|else). Because the lookahead has its own parentheses, the if and then parts are clearly separated.
 
 ## Author
 
