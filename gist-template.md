@@ -55,4 +55,6 @@ Using the constructor function provides runtime compilation of the regular expre
 
 ## Author
 
-A short section about the author with a link to the author's GitHub profile (replace with your information and a link to your profile)
+Benjamin Kim 
+https://github.com/opencbct/RegexTutorial/blob/main/README.md
+opencbct@gmail.com
